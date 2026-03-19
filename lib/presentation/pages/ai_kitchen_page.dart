@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../../data/models/recipe_model.dart';
 import '../../data/services/api_service.dart';
 import '../../data/services/favorites_service.dart';
+import '../../data/services/fridge_service.dart';
+import '../../data/services/shopping_service.dart';
 
 /// 智能私厨 - 根据食材推荐菜谱
 class AIKitchenPage extends StatefulWidget {
@@ -40,6 +42,42 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
   void dispose() {
     _ingredientController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadFridgeItems();
+  }
+
+  Future<void> _loadFridgeItems() async {
+    // 可以在这里加载冰箱食材
+  }
+
+  Future<void> _loadFromFridge() async {
+    final service = await FridgeService.getInstance();
+    final fridgeItems = service.getIngredientNames();
+    
+    if (fridgeItems.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('冰箱里还没有食材，去添加一些吧')),
+      );
+      return;
+    }
+
+    setState(() {
+      for (var item in fridgeItems) {
+        if (!_selectedIngredients.contains(item)) {
+          _selectedIngredients.add(item);
+        }
+      }
+    });
+
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('已添加 ${fridgeItems.length} 个冰箱食材')),
+    );
   }
 
   void _addIngredient(String ingredient) {
@@ -145,12 +183,22 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
             const SizedBox(height: 24),
 
             // 食材输入
-            const Text(
-              '我的食材',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            Row(
+              children: [
+                const Text(
+                  '我的食材',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: _loadFromFridge,
+                  icon: const Icon(Icons.kitchen, size: 18),
+                  label: const Text('从冰箱读取'),
+                ),
+              ],
             ),
             const SizedBox(height: 8),
             
