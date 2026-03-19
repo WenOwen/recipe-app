@@ -98,25 +98,30 @@ class AIService:
             prompt += f"饮食限制：{diet}\n"
 
         prompt += """
-请根据这些食材推荐一道最合适的菜谱。
+请根据这些食材推荐 3-5 道最合适的菜谱。
 推荐要求：
 1. 优先使用用户已有的食材
 2. 考虑食材之间的搭配
 3. 做法简单家常
 
-请以 JSON 格式返回推荐结果：
-{
-    "title": "菜谱名称",
-    "description": "简要描述（10字以内）",
-    "ingredients": ["食材1", "食材2", ...],
-    "steps": ["步骤1", "步骤2", ...],
-    "cooking_time": 30,
-    "difficulty": "简单/中等/困难",
-    "servings": 2,
-    "category": "中餐/西餐/日料等"
-}
+请以 JSON 格式返回推荐结果（数组）：
+[
+    {{
+        "title": "菜谱名称",
+        "description": "简要描述（10字以内）",
+        "ingredients": ["食材1", "食材2", ...],
+        "missing_ingredients": ["缺失食材1", "缺失食材2", ...],
+        "reason": "推荐理由（20字以内）",
+        "steps": ["步骤1", "步骤2", ...],
+        "cooking_time": 30,
+        "difficulty": "简单/中等/困难",
+        "servings": 2,
+        "category": "中餐/西餐/日料等"
+    }},
+    ...
+]
 
-请只返回 JSON，不要有其他内容。"""
+请只返回 JSON 数组，不要有其他内容。"""
 
         return prompt
 
@@ -178,21 +183,29 @@ class AIService:
 
             data = json.loads(json_str)
 
-            # 构建 Recipe 对象
-            recipe = Recipe(
-                id=f"ai_{hash(response) % 100000}",
-                title=data.get("title", ""),
-                description=data.get("description", ""),
-                image_url="",
-                ingredients=data.get("ingredients", []),
-                steps=data.get("steps", []),
-                cooking_time=data.get("cooking_time", 30),
-                difficulty=data.get("difficulty", "中等"),
-                servings=data.get("servings", 2),
-                category=data.get("category", "中餐"),
-                tags=["智能推荐"],
-            )
-            return [recipe]
+            # 支持单个和多个菜谱
+            if isinstance(data, dict):
+                data = [data]
+            
+            recipes = []
+            for item in data:
+                recipe = Recipe(
+                    id=f"ai_{hash(item.get('title', '')) % 100000}",
+                    title=item.get("title", ""),
+                    description=item.get("description", ""),
+                    image_url="",
+                    ingredients=item.get("ingredients", []),
+                    missing_ingredients=item.get("missing_ingredients", []),
+                    reason=item.get("reason", ""),
+                    steps=item.get("steps", []),
+                    cooking_time=item.get("cooking_time", 30),
+                    difficulty=item.get("difficulty", "中等"),
+                    servings=item.get("servings", 2),
+                    category=item.get("category", "中餐"),
+                    tags=["智能推荐"],
+                )
+                recipes.append(recipe)
+            return recipes
         except Exception as e:
             print(
                 f"解析 AI 响应失败: {e}, 原始响应: {response[:200] if len(response) > 200 else response}"

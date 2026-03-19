@@ -405,89 +405,201 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
             borderRadius: BorderRadius.circular(16),
             child: Padding(
               padding: const EdgeInsets.all(12),
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 占位图
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF6B35).withAlpha(30),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: const Icon(
-                      Icons.restaurant,
-                      size: 40,
-                      color: Color(0xFFFF6B35),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                  Row(
+                    children: [
+                      // 占位图
+                      Container(
+                        width: 80,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFF6B35).withAlpha(30),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(
+                          Icons.restaurant,
+                          size: 40,
+                          color: Color(0xFFFF6B35),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Text(
-                                recipe.title,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                            if (recipe.tags.contains('智能推荐'))
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFFF6B35).withAlpha(30),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: const Text(
-                                  '智能',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: Color(0xFFFF6B35),
-                                    fontWeight: FontWeight.bold,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    recipe.title,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 ),
+                                if (recipe.tags.contains('智能推荐'))
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 8,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFF6B35).withAlpha(30),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: const Text(
+                                      '智能',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Color(0xFFFF6B35),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              recipe.description,
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 13,
                               ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(Icons.timer, size: 14, color: Colors.grey[500]),
+                                const SizedBox(width: 4),
+                                Text(
+                                  '${recipe.cookingTime}分钟',
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Icon(Icons.restaurant, size: 14, color: Colors.grey[500]),
+                                const SizedBox(width: 4),
+                                Text(
+                                  recipe.difficulty,
+                                  style: TextStyle(
+                                    color: Colors.grey[500],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 4),
-                        Text(
-                          recipe.description,
-                          style: TextStyle(
-                            color: Colors.grey[600],
-                            fontSize: 13,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Icon(Icons.timer, size: 14, color: Colors.grey[500]),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${recipe.cookingTime}分钟',
-                              style: TextStyle(
-                                color: Colors.grey[500],
+                      ),
+                      // 收藏按钮
+                      FutureBuilder<bool>(
+                        future: FavoritesService.getInstance().then((s) => s.isFavorite(recipe.id)),
+                        builder: (context, snapshot) {
+                          final isFav = snapshot.data ?? false;
+                          return IconButton(
+                            icon: Icon(
+                              isFav ? Icons.favorite : Icons.favorite_border,
+                              color: isFav ? Colors.red : Colors.grey,
+                            ),
+                            onPressed: () async {
+                              final service = await FavoritesService.getInstance();
+                              await service.toggleFavorite(recipe);
+                              setState(() {}); // 刷新列表
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(isFav ? '已取消收藏' : '已收藏'),
+                                  duration: const Duration(seconds: 1),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  // 推荐理由
+                  if (recipe.reason.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.green.withAlpha(25),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.lightbulb_outline, size: 14, color: Colors.green),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              recipe.reason,
+                              style: const TextStyle(
                                 fontSize: 12,
+                                color: Colors.green,
                               ),
                             ),
-                            const SizedBox(width: 12),
-                            Icon(Icons.restaurant, size: 14, color: Colors.grey[500]),
-                            const SizedBox(width: 4),
-                            Text(
-                              recipe.difficulty,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  // 缺失食材
+                  if (recipe.missingIngredients.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 4,
+                      runSpacing: 4,
+                      children: [
+                        Text(
+                          '还需：',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        ...recipe.missingIngredients.take(4).map((ing) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.orange.withAlpha(25),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              ing,
                               style: TextStyle(
-                                color: Colors.grey[500],
-                                fontSize: 12,
+                                fontSize: 11,
+                                color: Colors.orange[800],
+                              ),
+                            ),
+                          );
+                        }),
+                        if (recipe.missingIngredients.length > 4)
+                          Text(
+                            '+${recipe.missingIngredients.length - 4}',
+                            style: TextStyle(
+                              fontSize: 11,
+                              color: Colors.grey[500],
+                            ),
+                          ),
+                      ],
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ),
+        );
+      }).toList(),
+    );
+  }
                               ),
                             ),
                           ],

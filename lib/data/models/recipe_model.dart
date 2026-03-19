@@ -12,6 +12,8 @@ class Recipe {
   final String category; // 分类：中餐/西餐/日料等
   final List<String> tags; // 标签：下饭、快手、减脂等
   final bool isFavorite;
+  final List<String> missingIngredients; // 缺失食材，做这道菜还需要什么
+  final String reason; // 推荐理由
 
   Recipe({
     required this.id,
@@ -26,6 +28,8 @@ class Recipe {
     required this.category,
     this.tags = const [],
     this.isFavorite = false,
+    this.missingIngredients = const [],
+    this.reason = "",
   });
 
   /// 从 JSON 创建 Recipe
@@ -43,6 +47,8 @@ class Recipe {
       category: json['category'] ?? '中餐',
       tags: List<String>.from(json['tags'] ?? []),
       isFavorite: json['is_favorite'] ?? false,
+      missingIngredients: List<String>.from(json['missing_ingredients'] ?? []),
+      reason: json['reason'] ?? '',
     );
   }
 
@@ -61,6 +67,8 @@ class Recipe {
       'category': category,
       'tags': tags,
       'is_favorite': isFavorite,
+      'missing_ingredients': missingIngredients,
+      'reason': reason,
     };
   }
 
@@ -78,6 +86,8 @@ class Recipe {
     String? category,
     List<String>? tags,
     bool? isFavorite,
+    List<String>? missingIngredients,
+    String? reason,
   }) {
     return Recipe(
       id: id ?? this.id,
@@ -92,6 +102,8 @@ class Recipe {
       category: category ?? this.category,
       tags: tags ?? this.tags,
       isFavorite: isFavorite ?? this.isFavorite,
+      missingIngredients: missingIngredients ?? this.missingIngredients,
+      reason: reason ?? this.reason,
     );
   }
 }

@@ -17,6 +17,8 @@ class Recipe(BaseModel):
     category: str  # 分类：中餐/西餐/日料等
     tags: List[str] = []  # 标签：下饭、快手、减脂等
     is_favorite: bool = False
+    missing_ingredients: List[str] = []  # 缺失食材，做这道菜还需要什么
+    reason: str = ""  # 推荐理由
 
 
 class RecipeListResponse(BaseModel):
