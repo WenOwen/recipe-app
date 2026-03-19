@@ -9,6 +9,9 @@ import 'presentation/pages/recipe_detail_page.dart';
 import 'presentation/pages/ai_kitchen_page.dart';
 import 'presentation/pages/add_recipe_page.dart';
 import 'presentation/pages/settings_page.dart';
+import 'presentation/pages/fridge_page.dart';
+import 'presentation/pages/shopping_list_page.dart';
+import 'presentation/pages/cook_records_page.dart';
 
 void main() {
   runApp(const RecipeApp());
@@ -47,6 +50,18 @@ class RecipeApp extends StatelessWidget {
           case '/settings':
             return MaterialPageRoute(
               builder: (_) => const SettingsPage(),
+            );
+          case '/fridge':
+            return MaterialPageRoute(
+              builder: (_) => const FridgePage(),
+            );
+          case '/shopping':
+            return MaterialPageRoute(
+              builder: (_) => const ShoppingListPage(),
+            );
+          case '/cook-records':
+            return MaterialPageRoute(
+              builder: (_) => const CookRecordsPage(),
             );
           default:
             return MaterialPageRoute(

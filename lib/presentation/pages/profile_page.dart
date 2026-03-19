@@ -146,6 +146,27 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildMenuList(BuildContext context) {
     final menus = [
       _MenuItem(
+        icon: Icons.kitchen,
+        title: '我的冰箱',
+        onTap: () {
+          Navigator.pushNamed(context, '/fridge');
+        },
+      ),
+      _MenuItem(
+        icon: Icons.shopping_cart,
+        title: '购物清单',
+        onTap: () {
+          Navigator.pushNamed(context, '/shopping');
+        },
+      ),
+      _MenuItem(
+        icon: Icons.restaurant,
+        title: '做菜记录',
+        onTap: () {
+          Navigator.pushNamed(context, '/cook-records');
+        },
+      ),
+      _MenuItem(
         icon: Icons.add_circle_outline,
         title: '发布菜谱',
         onTap: () {
@@ -165,9 +186,7 @@ class _ProfilePageState extends State<ProfilePage> {
         icon: Icons.history,
         title: '做过的菜',
         onTap: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('做过的菜功能开发中...')),
-          );
+          Navigator.pushNamed(context, '/cook-records');
         },
       ),
       _MenuItem(
