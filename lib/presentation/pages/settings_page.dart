@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import '../../data/services/settings_service.dart';
 
 /// 设置页面
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  final VoidCallback? onThemeChanged;
+
+  const SettingsPage({super.key, this.onThemeChanged});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -19,10 +22,20 @@ class _SettingsPageState extends State<SettingsPage> {
   }
 
   Future<void> _loadSettings() async {
-    // 模拟加载设置
+    final service = await SettingsService.getInstance();
     setState(() {
+      _darkMode = service.getDarkMode();
       _cacheSize = 12; // MB
     });
+  }
+
+  Future<void> _toggleDarkMode(bool value) async {
+    final service = await SettingsService.getInstance();
+    await service.setDarkMode(value);
+    setState(() {
+      _darkMode = value;
+    });
+    widget.onThemeChanged?.call();
   }
 
   Future<void> _clearCache() async {
@@ -45,7 +58,6 @@ class _SettingsPageState extends State<SettingsPage> {
     );
 
     if (confirmed == true) {
-      // 实际清除缓存逻辑
       setState(() => _cacheSize = 0);
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -68,13 +80,10 @@ class _SettingsPageState extends State<SettingsPage> {
             title: const Text('深色模式'),
             subtitle: const Text('切换深色/浅色主题'),
             value: _darkMode,
-            onChanged: (value) {
-              setState(() => _darkMode = value);
-              // TODO: 实现主题切换
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('主题切换功能开发中...')),
-              );
-            },
+            onChanged: _toggleDarkMode,
+            secondary: Icon(
+              _darkMode ? Icons.dark_mode : Icons.light_mode,
+            ),
           ),
           const Divider(),
 
@@ -90,20 +99,20 @@ class _SettingsPageState extends State<SettingsPage> {
 
           // 关于
           _buildSectionTitle('关于'),
-          ListTile(
-            title: const Text('版本'),
-            subtitle: const Text('1.0.0'),
+          const ListTile(
+            title: Text('版本'),
+            subtitle: Text('1.0.0'),
           ),
           ListTile(
             title: const Text('关于我们'),
-            subtitle: const Text('AI 菜谱推荐 App'),
+            subtitle: const Text('智能菜谱推荐 App'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () {
               showAboutDialog(
                 context: context,
-                applicationName: 'AI 菜谱',
+                applicationName: '智能菜谱',
                 applicationVersion: '1.0.0',
-                applicationLegalese: '© 2026 AI 菜谱团队',
+                applicationLegalese: '© 2026 智能菜谱团队',
               );
             },
           ),
@@ -113,7 +122,7 @@ class _SettingsPageState extends State<SettingsPage> {
             onTap: () {
               showLicensePage(
                 context: context,
-                applicationName: 'AI 菜谱',
+                applicationName: '智能菜谱',
                 applicationVersion: '1.0.0',
               );
             },

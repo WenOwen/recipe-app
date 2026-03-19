@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'core/theme/app_theme.dart';
 import 'data/models/recipe_model.dart';
+import 'data/services/settings_service.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/search_page.dart';
 import 'presentation/pages/favorites_page.dart';
@@ -17,22 +18,52 @@ void main() {
   runApp(const RecipeApp());
 }
 
-class RecipeApp extends StatelessWidget {
+class RecipeApp extends StatefulWidget {
   const RecipeApp({super.key});
+
+  @override
+  State<RecipeApp> createState() => _RecipeAppState();
+}
+
+class _RecipeAppState extends State<RecipeApp> {
+  bool _isDarkMode = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadTheme();
+  }
+
+  Future<void> _loadTheme() async {
+    final service = await SettingsService.getInstance();
+    setState(() {
+      _isDarkMode = service.getDarkMode();
+    });
+  }
+
+  void _toggleTheme() {
+    setState(() {
+      _isDarkMode = !_isDarkMode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'AI 菜谱',
+      title: '智能菜谱',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
       // 路由配置
       initialRoute: '/',
       onGenerateRoute: (settings) {
         switch (settings.name) {
           case '/':
             return MaterialPageRoute(
-              builder: (_) => const MainNavigation(),
+              builder: (_) => MainNavigation(
+                onThemeChanged: _toggleTheme,
+              ),
             );
           case '/detail':
             final recipe = settings.arguments as Recipe;
@@ -49,7 +80,7 @@ class RecipeApp extends StatelessWidget {
             );
           case '/settings':
             return MaterialPageRoute(
-              builder: (_) => const SettingsPage(),
+              builder: (_) => SettingsPage(onThemeChanged: _toggleTheme),
             );
           case '/fridge':
             return MaterialPageRoute(
@@ -65,7 +96,9 @@ class RecipeApp extends StatelessWidget {
             );
           default:
             return MaterialPageRoute(
-              builder: (_) => const MainNavigation(),
+              builder: (_) => MainNavigation(
+                onThemeChanged: _toggleTheme,
+              ),
             );
         }
       },
@@ -75,7 +108,9 @@ class RecipeApp extends StatelessWidget {
 
 /// 主导航页面（含底部导航栏）
 class MainNavigation extends StatefulWidget {
-  const MainNavigation({super.key});
+  final VoidCallback? onThemeChanged;
+
+  const MainNavigation({super.key, this.onThemeChanged});
 
   @override
   State<MainNavigation> createState() => _MainNavigationState();
