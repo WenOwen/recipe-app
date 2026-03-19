@@ -678,44 +678,4 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
       }).toList(),
     );
   }
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  // 收藏按钮
-                  FutureBuilder<bool>(
-                    future: FavoritesService.getInstance().then((s) => s.isFavorite(recipe.id)),
-                    builder: (context, snapshot) {
-                      final isFav = snapshot.data ?? false;
-                      return IconButton(
-                        icon: Icon(
-                          isFav ? Icons.favorite : Icons.favorite_border,
-                          color: isFav ? Colors.red : Colors.grey,
-                        ),
-                        onPressed: () async {
-                          final service = await FavoritesService.getInstance();
-                          await service.toggleFavorite(recipe);
-                          setState(() {}); // 刷新列表
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(isFav ? '已取消收藏' : '已收藏'),
-                              duration: const Duration(seconds: 1),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      }).toList(),
-    );
-  }
 }

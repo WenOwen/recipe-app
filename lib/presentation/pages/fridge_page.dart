@@ -11,7 +11,7 @@ class FridgePage extends StatefulWidget {
 }
 
 class _FridgePageState extends State<FridgePage> {
-  final FridgeService _service = FridgeService();
+  FridgeService? _service;
   List<FridgeItem> _items = [];
   String _selectedCategory = '全部';
 
@@ -22,9 +22,9 @@ class _FridgePageState extends State<FridgePage> {
   }
 
   Future<void> _loadItems() async {
-    final service = await FridgeService.getInstance();
+    _service ??= await FridgeService.getInstance();
     setState(() {
-      _items = service.getItems();
+      _items = _service!.getItems();
     });
   }
 
@@ -33,10 +33,6 @@ class _FridgePageState extends State<FridgePage> {
       return _items;
     }
     return _items.where((e) => e.category == _selectedCategory).toList();
-  }
-
-  Map<String, List<FridgeItem>> get _itemsByCategory {
-    return _service.getItemsByCategory();
   }
 
   Future<void> _addItem() async {
