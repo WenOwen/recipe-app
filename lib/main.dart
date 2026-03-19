@@ -1,0 +1,131 @@
+import 'package:flutter/material.dart';
+import 'core/theme/app_theme.dart';
+import 'data/models/recipe_model.dart';
+import 'presentation/pages/home_page.dart';
+import 'presentation/pages/search_page.dart';
+import 'presentation/pages/favorites_page.dart';
+import 'presentation/pages/profile_page.dart';
+import 'presentation/pages/recipe_detail_page.dart';
+import 'presentation/pages/ai_kitchen_page.dart';
+import 'presentation/pages/add_recipe_page.dart';
+import 'presentation/pages/settings_page.dart';
+
+void main() {
+  runApp(const RecipeApp());
+}
+
+class RecipeApp extends StatelessWidget {
+  const RecipeApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'AI 菜谱',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      // 路由配置
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(
+              builder: (_) => const MainNavigation(),
+            );
+          case '/detail':
+            final recipe = settings.arguments as Recipe;
+            return MaterialPageRoute(
+              builder: (_) => RecipeDetailPage(recipe: recipe),
+            );
+          case '/search':
+            return MaterialPageRoute(
+              builder: (_) => const SearchPage(),
+            );
+          case '/add-recipe':
+            return MaterialPageRoute(
+              builder: (_) => const AddRecipePage(),
+            );
+          case '/settings':
+            return MaterialPageRoute(
+              builder: (_) => const SettingsPage(),
+            );
+          default:
+            return MaterialPageRoute(
+              builder: (_) => const MainNavigation(),
+            );
+        }
+      },
+    );
+  }
+}
+
+/// 主导航页面（含底部导航栏）
+class MainNavigation extends StatefulWidget {
+  const MainNavigation({super.key});
+
+  @override
+  State<MainNavigation> createState() => _MainNavigationState();
+}
+
+class _MainNavigationState extends State<MainNavigation> {
+  int _currentIndex = 0;
+
+  // 页面构建器，切换 tab 时重建页面
+  Widget _buildPage(int index) {
+    switch (index) {
+      case 0:
+        return const HomePage();
+      case 1:
+        return const AIKitchenPage();
+      case 2:
+        return const SearchPage();
+      case 3:
+        return const FavoritesPage();
+      case 4:
+        return const ProfilePage();
+      default:
+        return const HomePage();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: _buildPage(_currentIndex),
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: _currentIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _currentIndex = index;
+          });
+        },
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: '首页',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.auto_awesome_outlined),
+            selectedIcon: Icon(Icons.auto_awesome),
+            label: 'AI厨房',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.search_outlined),
+            selectedIcon: Icon(Icons.search),
+            label: '搜索',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.favorite_outline),
+            selectedIcon: Icon(Icons.favorite),
+            label: '收藏',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: '我的',
+          ),
+        ],
+      ),
+    );
+  }
+}

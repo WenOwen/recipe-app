@@ -1,0 +1,18 @@
+# Web 框架
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# HTTP 客户端
+httpx==0.26.0
+
+# LangChain
+langchain==0.1.4
+langchain-core==0.1.10
+langchain-community==0.0.16
+
+# 数据处理
+pydantic==2.5.3
+
+# 环境变量
+python-dotenv==1.0.0
