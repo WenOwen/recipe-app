@@ -20,11 +20,13 @@ class AIService:
         ingredients: list[str],
         taste: Optional[str] = None,
         diet: Optional[str] = None,
+        count: int = 3,
     ) -> list[Recipe]:
         """
         根据食材推荐菜谱
 
         使用 MiniMax M2.7 模型进行分析
+        count: 推荐数量 1-3
         """
         if not self.api_key or self.api_key == "你的API密钥填在这里":
             # 没有 API Key 时，使用简单匹配逻辑
@@ -97,8 +99,8 @@ class AIService:
         if diet:
             prompt += f"饮食限制：{diet}\n"
 
-        prompt += """
-请根据这些食材推荐 3-5 道最合适的菜谱。
+        prompt += f"""
+请根据这些食材推荐 {count} 道最合适的菜谱。
 推荐要求：
 1. 优先使用用户已有的食材
 2. 考虑食材之间的搭配

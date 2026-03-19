@@ -31,8 +31,9 @@ class RecipeListResponse(BaseModel):
 
 
 class RecommendRequest(BaseModel):
-    """AI 推荐请求"""
+    """智能私厨推荐请求"""
 
     ingredients: List[str]  # 已有食材
     taste: Optional[str] = None  # 口味偏好：辣、清淡、甜等
     diet: Optional[str] = None  # 饮食限制：素食、低糖等
+    count: int = 3  # 推荐数量：1、2、3

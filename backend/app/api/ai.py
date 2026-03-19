@@ -7,17 +7,18 @@ router = APIRouter(prefix="/api/ai", tags=["AI 推荐"])
 
 @router.post("/recommend", response_model=list[Recipe])
 async def recommend_recipes(request: RecommendRequest):
-    """根据食材 AI 推荐菜谱"""
+    """根据食材智能私厨推荐菜谱"""
     try:
         recommendations = await ai_service.recommend(
             ingredients=request.ingredients,
             taste=request.taste,
             diet=request.diet,
+            count=request.count,
         )
         return recommendations
     except Exception as e:
         # 如果 AI 服务出错，返回空列表或模拟数据
-        print(f"AI 推荐出错: {e}")
+        print(f"智能私厨推荐出错: {e}")
         return []
 
 

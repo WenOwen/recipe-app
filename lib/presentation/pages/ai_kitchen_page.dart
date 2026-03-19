@@ -19,6 +19,7 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
   // 可选偏好
   String? _selectedTaste;
   String? _selectedDiet;
+  int _selectedCount = 3; // 默认推荐3个
   
   List<Recipe> _recommendations = [];
   bool _isLoading = false;
@@ -76,6 +77,7 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
         ingredients: _selectedIngredients,
         taste: _selectedTaste,
         diet: _selectedDiet,
+        count: _selectedCount,
       );
 
       if (!mounted) return;
@@ -107,6 +109,7 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
                   _selectedIngredients.clear();
                   _recommendations.clear();
                   _hasSearched = false;
+                  _selectedCount = 3;
                 });
               },
               icon: const Icon(Icons.clear_all),
@@ -287,6 +290,33 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
                   );
                 }),
               ],
+            ),
+            const SizedBox(height: 16),
+
+            // 推荐数量
+            const Text(
+              '推荐数量',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [1, 2, 3].map((num) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: ChoiceChip(
+                    label: Text('$num 个'),
+                    selected: _selectedCount == num,
+                    onSelected: (selected) {
+                      setState(() {
+                        _selectedCount = num;
+                      });
+                    },
+                  ),
+                );
+              }).toList(),
             ),
             const SizedBox(height: 32),
 

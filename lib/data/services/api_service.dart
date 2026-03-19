@@ -72,11 +72,12 @@ class ApiService {
     }
   }
 
-  /// AI 智能推荐
+  /// 智能私厨推荐
   Future<List<Recipe>> getAIRecommendations({
     required List<String> ingredients,
     String? taste, // 口味偏好
     String? diet, // 饮食限制
+    int count = 3, // 推荐数量：1、2、3
   }) async {
     try {
       // 使用 AI 专用实例，超时更长
@@ -86,6 +87,7 @@ class ApiService {
           'ingredients': ingredients,
           if (taste != null) 'taste': taste,
           if (diet != null) 'diet': diet,
+          'count': count,
         },
       );
 
