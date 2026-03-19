@@ -3,7 +3,7 @@ import '../../data/models/recipe_model.dart';
 import '../../data/services/api_service.dart';
 import '../../data/services/favorites_service.dart';
 
-/// AI 厨房 - 根据食材推荐菜谱
+/// 智能私厨 - 根据食材推荐菜谱
 class AIKitchenPage extends StatefulWidget {
   const AIKitchenPage({super.key});
 
@@ -98,7 +98,7 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AI 厨房'),
+        title: const Text('智能私厨'),
         actions: [
           if (_selectedIngredients.isNotEmpty)
             TextButton.icon(
@@ -132,7 +132,7 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
                   const SizedBox(width: 12),
                   Expanded(
                     child: Text(
-                      '输入你冰箱里有的食材，AI 为你推荐合适的菜谱',
+                      '输入你冰箱里有的食材，智能私厨为你推荐合适的菜谱',
                       style: TextStyle(color: Colors.grey[700]),
                     ),
                   ),
@@ -302,7 +302,7 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(Icons.auto_awesome),
-                label: Text(_isLoading ? 'AI 分析中...' : 'AI 推荐菜谱'),
+                label: Text(_isLoading ? '智能推荐中...' : '智能推荐菜谱'),
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
@@ -437,7 +437,7 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
                                 ),
                               ),
                             ),
-                            if (recipe.tags.contains('AI推荐'))
+                            if (recipe.tags.contains('智能推荐'))
                               Container(
                                 padding: const EdgeInsets.symmetric(
                                   horizontal: 8,
@@ -448,7 +448,7 @@ class _AIKitchenPageState extends State<AIKitchenPage> {
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: const Text(
-                                  'AI',
+                                  '智能',
                                   style: TextStyle(
                                     fontSize: 10,
                                     color: Color(0xFFFF6B35),

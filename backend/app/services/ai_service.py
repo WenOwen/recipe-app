@@ -190,7 +190,7 @@ class AIService:
                 difficulty=data.get("difficulty", "中等"),
                 servings=data.get("servings", 2),
                 category=data.get("category", "中餐"),
-                tags=["AI推荐"],
+                tags=["智能推荐"],
             )
             return [recipe]
         except Exception as e:
