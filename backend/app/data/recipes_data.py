@@ -1,5 +1,7 @@
 """模拟菜谱数据（实际项目中会从数据库获取）"""
 
+from __future__ import annotations
+
 from app.models.recipe import Recipe
 
 RECIPES = [

@@ -33,7 +33,7 @@ class AIService:
             return self._simple_recommend(ingredients, taste, diet)
 
         # 调用 AI
-        prompt = self._build_prompt(ingredients, taste, diet)
+        prompt = self._build_prompt(ingredients, taste, diet, count)
 
         try:
             response = await self._call_ai(prompt)
@@ -87,6 +87,7 @@ class AIService:
         ingredients: list[str],
         taste: Optional[str] = None,
         diet: Optional[str] = None,
+        count: int = 3,
     ) -> str:
         """构建 AI prompt"""
         ingredient_str = "、".join(ingredients)

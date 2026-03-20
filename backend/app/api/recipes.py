@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from fastapi import APIRouter, HTTPException, Query
-from typing import Optional
+from typing import Optional, List
 from app.models import Recipe, RecipeListResponse
 from app.data import (
     RECIPES,
@@ -66,7 +68,7 @@ async def get_recipe_detail(recipe_id: str):
     return recipe
 
 
-@router.get("/recipes/search", response_model=list[Recipe])
+@router.get("/recipes/search", response_model=List[Recipe])
 async def search_recipe(q: str = Query(..., min_length=1, description="搜索关键词")):
     """搜索菜谱"""
     return search_recipes(q)

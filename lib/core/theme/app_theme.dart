@@ -157,18 +157,30 @@ class AppTheme {
         ),
       ),
       textTheme: const TextTheme(
-        headlineLarge: TextStyle(color: lightTextPrimary, fontWeight: FontWeight.bold),
-        headlineMedium: TextStyle(color: lightTextPrimary, fontWeight: FontWeight.bold),
-        headlineSmall: TextStyle(color: lightTextPrimary, fontWeight: FontWeight.bold),
-        titleLarge: TextStyle(color: lightTextPrimary, fontWeight: FontWeight.w600),
-        titleMedium: TextStyle(color: lightTextPrimary, fontWeight: FontWeight.w500),
-        titleSmall: TextStyle(color: lightTextPrimary),
-        bodyLarge: TextStyle(color: lightTextPrimary),
-        bodyMedium: TextStyle(color: lightTextPrimary),
-        bodySmall: TextStyle(color: lightTextSecondary),
-        labelLarge: TextStyle(color: lightTextPrimary, fontWeight: FontWeight.w500),
-        labelMedium: TextStyle(color: lightTextSecondary),
-        labelSmall: TextStyle(color: lightTextSecondary),
+        // 标题 - 更大更粗
+        displayLarge: TextStyle(color: lightTextPrimary, fontSize: 32, fontWeight: FontWeight.bold),
+        displayMedium: TextStyle(color: lightTextPrimary, fontSize: 28, fontWeight: FontWeight.bold),
+        displaySmall: TextStyle(color: lightTextPrimary, fontSize: 24, fontWeight: FontWeight.bold),
+        headlineLarge: TextStyle(color: lightTextPrimary, fontSize: 24, fontWeight: FontWeight.bold),
+        headlineMedium: TextStyle(color: lightTextPrimary, fontSize: 22, fontWeight: FontWeight.bold),
+        headlineSmall: TextStyle(color: lightTextPrimary, fontSize: 20, fontWeight: FontWeight.w600),
+        // 列表标题 - 更大更粗
+        titleLarge: TextStyle(color: lightTextPrimary, fontSize: 20, fontWeight: FontWeight.w600),
+        titleMedium: TextStyle(color: lightTextPrimary, fontSize: 18, fontWeight: FontWeight.w500),
+        titleSmall: TextStyle(color: lightTextPrimary, fontSize: 16, fontWeight: FontWeight.w500),
+        // 正文 - 更大更粗
+        bodyLarge: TextStyle(color: lightTextPrimary, fontSize: 18, fontWeight: FontWeight.normal),
+        bodyMedium: TextStyle(color: lightTextPrimary, fontSize: 16, fontWeight: FontWeight.normal),
+        bodySmall: TextStyle(color: lightTextSecondary, fontSize: 14, fontWeight: FontWeight.normal),
+        // 标签 - 更大更粗
+        labelLarge: TextStyle(color: lightTextPrimary, fontSize: 16, fontWeight: FontWeight.w500),
+        labelMedium: TextStyle(color: lightTextSecondary, fontSize: 14, fontWeight: FontWeight.w500),
+        labelSmall: TextStyle(color: lightTextSecondary, fontSize: 12, fontWeight: FontWeight.w500),
+      ),
+      // 设置全局默认字体
+      primaryTextTheme: const TextTheme(
+        bodyLarge: TextStyle(color: lightTextPrimary, fontSize: 18, fontWeight: FontWeight.normal),
+        bodyMedium: TextStyle(color: lightTextPrimary, fontSize: 16, fontWeight: FontWeight.normal),
       ),
     );
   }
@@ -310,18 +322,30 @@ class AppTheme {
         ),
       ),
       textTheme: const TextTheme(
-        headlineLarge: TextStyle(color: darkTextPrimary, fontWeight: FontWeight.bold),
-        headlineMedium: TextStyle(color: darkTextPrimary, fontWeight: FontWeight.bold),
-        headlineSmall: TextStyle(color: darkTextPrimary, fontWeight: FontWeight.bold),
-        titleLarge: TextStyle(color: darkTextPrimary, fontWeight: FontWeight.w600),
-        titleMedium: TextStyle(color: darkTextPrimary, fontWeight: FontWeight.w500),
-        titleSmall: TextStyle(color: darkTextPrimary),
-        bodyLarge: TextStyle(color: darkTextPrimary),
-        bodyMedium: TextStyle(color: darkTextPrimary),
-        bodySmall: TextStyle(color: darkTextSecondary),
-        labelLarge: TextStyle(color: darkTextPrimary, fontWeight: FontWeight.w500),
-        labelMedium: TextStyle(color: darkTextSecondary),
-        labelSmall: TextStyle(color: darkTextSecondary),
+        // 标题 - 更大更粗
+        displayLarge: TextStyle(color: darkTextPrimary, fontSize: 32, fontWeight: FontWeight.bold),
+        displayMedium: TextStyle(color: darkTextPrimary, fontSize: 28, fontWeight: FontWeight.bold),
+        displaySmall: TextStyle(color: darkTextPrimary, fontSize: 24, fontWeight: FontWeight.bold),
+        headlineLarge: TextStyle(color: darkTextPrimary, fontSize: 24, fontWeight: FontWeight.bold),
+        headlineMedium: TextStyle(color: darkTextPrimary, fontSize: 22, fontWeight: FontWeight.bold),
+        headlineSmall: TextStyle(color: darkTextPrimary, fontSize: 20, fontWeight: FontWeight.w600),
+        // 列表标题 - 更大更粗
+        titleLarge: TextStyle(color: darkTextPrimary, fontSize: 20, fontWeight: FontWeight.w600),
+        titleMedium: TextStyle(color: darkTextPrimary, fontSize: 18, fontWeight: FontWeight.w500),
+        titleSmall: TextStyle(color: darkTextPrimary, fontSize: 16, fontWeight: FontWeight.w500),
+        // 正文 - 更大更粗
+        bodyLarge: TextStyle(color: darkTextPrimary, fontSize: 18, fontWeight: FontWeight.normal),
+        bodyMedium: TextStyle(color: darkTextPrimary, fontSize: 16, fontWeight: FontWeight.normal),
+        bodySmall: TextStyle(color: darkTextSecondary, fontSize: 14, fontWeight: FontWeight.normal),
+        // 标签 - 更大更粗
+        labelLarge: TextStyle(color: darkTextPrimary, fontSize: 16, fontWeight: FontWeight.w500),
+        labelMedium: TextStyle(color: darkTextSecondary, fontSize: 14, fontWeight: FontWeight.w500),
+        labelSmall: TextStyle(color: darkTextSecondary, fontSize: 12, fontWeight: FontWeight.w500),
+      ),
+      // 设置全局默认字体
+      primaryTextTheme: const TextTheme(
+        bodyLarge: TextStyle(color: darkTextPrimary, fontSize: 18, fontWeight: FontWeight.normal),
+        bodyMedium: TextStyle(color: darkTextPrimary, fontSize: 16, fontWeight: FontWeight.normal),
       ),
     );
   }

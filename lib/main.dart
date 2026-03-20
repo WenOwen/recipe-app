@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'core/theme/app_theme.dart';
+import 'core/theme/theme_provider.dart';
 import 'data/models/recipe_model.dart';
-import 'data/services/settings_service.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/pages/search_page.dart';
 import 'presentation/pages/favorites_page.dart';
@@ -18,90 +19,78 @@ void main() {
   runApp(const RecipeApp());
 }
 
-class RecipeApp extends StatefulWidget {
+class RecipeApp extends StatelessWidget {
   const RecipeApp({super.key});
 
   @override
-  State<RecipeApp> createState() => _RecipeAppState();
-}
-
-class _RecipeAppState extends State<RecipeApp> {
-  bool _isDarkMode = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadTheme();
-  }
-
-  Future<void> _loadTheme() async {
-    final service = await SettingsService.getInstance();
-    setState(() {
-      _isDarkMode = service.getDarkMode();
-    });
-  }
-
-  void _toggleTheme() {
-    setState(() {
-      _isDarkMode = !_isDarkMode;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '智能菜谱',
-      debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      themeMode: _isDarkMode ? ThemeMode.dark : ThemeMode.light,
-      // 路由配置
-      initialRoute: '/',
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case '/':
-            return MaterialPageRoute(
-              builder: (_) => MainNavigation(
-                onThemeChanged: _toggleTheme,
-              ),
-            );
-          case '/detail':
-            final recipe = settings.arguments as Recipe;
-            return MaterialPageRoute(
-              builder: (_) => RecipeDetailPage(recipe: recipe),
-            );
-          case '/search':
-            return MaterialPageRoute(
-              builder: (_) => const SearchPage(),
-            );
-          case '/add-recipe':
-            return MaterialPageRoute(
-              builder: (_) => const AddRecipePage(),
-            );
-          case '/settings':
-            return MaterialPageRoute(
-              builder: (_) => SettingsPage(onThemeChanged: _toggleTheme),
-            );
-          case '/fridge':
-            return MaterialPageRoute(
-              builder: (_) => const FridgePage(),
-            );
-          case '/shopping':
-            return MaterialPageRoute(
-              builder: (_) => const ShoppingListPage(),
-            );
-          case '/cook-records':
-            return MaterialPageRoute(
-              builder: (_) => const CookRecordsPage(),
-            );
-          default:
-            return MaterialPageRoute(
-              builder: (_) => MainNavigation(
-                onThemeChanged: _toggleTheme,
-              ),
-            );
-        }
-      },
+    return ChangeNotifierProvider(
+      create: (_) => ThemeProvider(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) {
+          return MaterialApp(
+            title: '智能菜谱',
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            initialRoute: '/',
+            onGenerateRoute: (settings) {
+              switch (settings.name) {
+                case '/':
+                  return MaterialPageRoute(
+                    builder: (_) => MainNavigation(
+                      onThemeChanged: () {
+                        context.read<ThemeProvider>().toggleTheme();
+                      },
+                    ),
+                  );
+                case '/detail':
+                  final recipe = settings.arguments as Recipe;
+                  return MaterialPageRoute(
+                    builder: (_) => RecipeDetailPage(recipe: recipe),
+                  );
+                case '/search':
+                  return MaterialPageRoute(
+                    builder: (_) => const SearchPage(),
+                  );
+                case '/add-recipe':
+                  return MaterialPageRoute(
+                    builder: (_) => const AddRecipePage(),
+                  );
+                case '/settings':
+                  return MaterialPageRoute(
+                    builder: (_) => SettingsPage(
+                      onThemeChanged: () {
+                        context.read<ThemeProvider>().toggleTheme();
+                      },
+                    ),
+                  );
+                case '/fridge':
+                  return MaterialPageRoute(
+                    builder: (_) => const FridgePage(),
+                  );
+                case '/shopping':
+                  return MaterialPageRoute(
+                    builder: (_) => const ShoppingListPage(),
+                  );
+                case '/cook-records':
+                  return MaterialPageRoute(
+                    builder: (_) => const CookRecordsPage(),
+                  );
+                default:
+                  return MaterialPageRoute(
+                    builder: (_) => MainNavigation(
+                      onThemeChanged: () {
+                        context.read<ThemeProvider>().toggleTheme();
+                      },
+                    ),
+                  );
+              }
+            },
+          );
+        },
+      ),
     );
   }
 }
@@ -119,7 +108,6 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
-  // 页面构建器，切换 tab 时重建页面
   Widget _buildPage(int index) {
     switch (index) {
       case 0:
