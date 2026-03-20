@@ -42,9 +42,9 @@ class RecipeCategories {
 
 /// API 配置
 class ApiConstants {
-  // TODO: 后端部署后替换
-  static const String baseUrl = 'http://localhost:8000/api';
-  static const String wsUrl = 'ws://localhost:8000/ws';
+  // 生产环境 - 服务器部署
+  static const String baseUrl = 'http://38.55.133.88:8000/api';
+  static const String wsUrl = 'ws://38.55.133.88:8000/ws';
 }
 
 /// 本地存储 Key

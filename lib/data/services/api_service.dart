@@ -5,8 +5,8 @@ import '../models/recipe_model.dart';
 class ApiService {
   late final Dio _dio;
 
-  // TODO: 替换为实际后端地址
-  static const String baseUrl = 'http://localhost:8000/api';
+  // 生产环境 - 服务器部署
+  static const String baseUrl = 'http://38.55.133.88:8000/api';
 
   ApiService() {
     _dio = Dio(BaseOptions(
