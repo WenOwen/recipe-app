@@ -130,7 +130,9 @@ class AIService:
 
     async def _call_ai(self, prompt: str) -> str:
         """调用 MiniMax M2.7 API (Anthropic 兼容)"""
-        import httpx
+        import requests
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
         headers = {
             "x-api-key": self.api_key,
@@ -149,22 +151,24 @@ class AIService:
         # 注意：Coding Plan 可能需要 /v1 前缀
         url = f"{self.base_url}/v1/messages"
 
-        async with httpx.AsyncClient(timeout=httpx.Timeout(120.0)) as client:
-            response = await client.post(
-                url,
-                headers=headers,
-                json=data,
-            )
-            response.raise_for_status()
-            result = response.json()
+        # 使用 requests 库，禁用 SSL 验证
+        response = requests.post(
+            url,
+            headers=headers,
+            json=data,
+            timeout=120,
+            verify=False
+        )
+        response.raise_for_status()
+        result = response.json()
 
-            # Anthropic 格式的响应
-            if "content" in result:
-                for block in result["content"]:
-                    if block.get("type") == "text":
-                        return block["text"]
+        # Anthropic 格式的响应
+        if "content" in result:
+            for block in result["content"]:
+                if block.get("type") == "text":
+                    return block["text"]
 
-            return result.get("content", [{}])[0].get("text", "")
+        return result.get("content", [{}])[0].get("text", "")
 
     def _parse_response(self, response: str) -> list[Recipe]:
         """解析 AI 返回的 JSON 响应"""
